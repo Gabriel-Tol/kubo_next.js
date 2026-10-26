@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kanvas: #fcf8f2;
+  --color-permukaan: #ffffff;
+  --color-kakao: #34231d;
+  --color-aksen: #a64220;
+  --color-teks2: #74645a;
+  --color-sukses: #256046;
+  --color-error: #a32929;
+  --font-judul: "Lora", Georgia, "Times New Roman", serif;
+  --font-isi: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  background-color: var(--color-kanvas);
+  color: var(--color-kakao);
+  font-family: var(--font-isi);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-judul);
+  line-height: 1.15;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-aksen);
+  outline-offset: 3px;
+}

@@ -1,0 +1,193 @@
+// Skema disederhanakan untuk SQLite agar langsung jalan tanpa server MySQL.
+// Prinsip & kolom mengikuti PRD 4.3 (status disimpan sebagai String karena SQLite tanpa enum).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         String    @default("CUSTOMER") // CUSTOMER | ADMIN
+  fullName     String
+  phone        String
+  createdAt    DateTime  @default(now())
+  addresses    Address[]
+  orders       Order[]
+  carts        Cart[]
+}
+
+model Address {
+  id            String        @id @default(cuid())
+  userId        String
+  label         String
+  recipientName String
+  phone         String
+  street        String
+  zoneId        String
+  landmark      String?
+  isDefault     Boolean       @default(false)
+  user          User          @relation(fields: [userId], references: [id])
+  zone          DeliveryZone  @relation(fields: [zoneId], references: [id])
+}
+
+model DeliveryZone {
+  id        String    @id @default(cuid())
+  name      String // "Zona A"
+  areaLabel String // "Coblong"
+  fee       Int
+  isActive  Boolean   @default(true)
+  addresses Address[]
+  orders    Order[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  sortOrder Int      @default(0)
+  products Product[]
+}
+
+model Product {
+  id           String           @id @default(cuid())
+  categoryId   String
+  name         String
+  slug         String           @unique
+  description  String
+  composition  String
+  allergens    String?
+  storageNote  String?
+  imageUrl     String?
+  isActive     Boolean          @default(true)
+  archivedAt   DateTime?
+  category     Category         @relation(fields: [categoryId], references: [id])
+  variants     ProductVariant[]
+}
+
+model ProductVariant {
+  id        String       @id @default(cuid())
+  productId String
+  label     String // "20 cm"
+  price     Int
+  stock     Int          @default(0)
+  isActive  Boolean      @default(true)
+  product   Product      @relation(fields: [productId], references: [id])
+  cartItems CartItem[]
+  orderItems OrderItem[]
+}
+
+model Cart {
+  id         String     @id @default(cuid())
+  userId     String?    @unique
+  guestToken String?    @unique
+  createdAt  DateTime   @default(now())
+  user       User?      @relation(fields: [userId], references: [id])
+  items      CartItem[]
+}
+
+model CartItem {
+  id        String         @id @default(cuid())
+  cartId    String
+  variantId String
+  qty       Int            @default(1)
+  note      String?
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  @@unique([cartId, variantId])
+}
+
+model TimeSlot {
+  id        String  @id @default(cuid())
+  label     String // "08.00–10.00"
+  startTime String // "08:00"
+  endTime   String // "10:00"
+  isActive  Boolean @default(true)
+  isFull    Boolean @default(false)
+  orders    Order[]
+}
+
+model Order {
+  id             String            @id @default(cuid())
+  orderNo        String            @unique
+  userId         String
+  customerName   String
+  customerPhone  String
+  customerEmail  String
+  fulfillment    String // PICKUP | DELIVERY
+  scheduledDate  String // yyyy-mm-dd
+  slotId         String
+  addressSnapshot String?
+  zoneId         String?
+  deliveryFee    Int               @default(0)
+  subtotal       Int
+  total          Int
+  status         String // Menunggu Pembayaran | Dikonfirmasi | Diproses | Siap Diambil | Sedang Diantar | Selesai | Dibatalkan
+  paymentDueAt   DateTime
+  cancelReason   String?
+  stockDeducted  Boolean           @default(false)
+  createdAt      DateTime          @default(now())
+  user           User              @relation(fields: [userId], references: [id])
+  slot           TimeSlot          @relation(fields: [slotId], references: [id])
+  zone           DeliveryZone?     @relation(fields: [zoneId], references: [id])
+  items          OrderItem[]
+  proofs         PaymentProof[]
+  logs           OrderStatusLog[]
+
+  @@index([userId, createdAt])
+  @@index([status, paymentDueAt])
+}
+
+model OrderItem {
+  id           String         @id @default(cuid())
+  orderId      String
+  variantId    String
+  productName  String // snapshot
+  variantLabel String // snapshot
+  unitPrice    Int // snapshot
+  qty          Int
+  note         String?
+  lineTotal    Int
+  order        Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant      ProductVariant @relation(fields: [variantId], references: [id])
+}
+
+model PaymentProof {
+  id           String    @id @default(cuid())
+  orderId      String
+  filePath     String
+  originalName String
+  sizeBytes    Int
+  mime         String
+  status       String    @default("SUBMITTED") // SUBMITTED | ACCEPTED | REJECTED
+  rejectReason String?
+  reviewedBy   String?
+  reviewedAt   DateTime?
+  uploadedAt   DateTime  @default(now())
+  order        Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+model OrderStatusLog {
+  id         String   @id @default(cuid())
+  orderId    String
+  fromStatus String?
+  toStatus   String
+  actorName  String
+  note       String?
+  createdAt  DateTime @default(now())
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Setting {
+  key   String @id
+  value String
+}
