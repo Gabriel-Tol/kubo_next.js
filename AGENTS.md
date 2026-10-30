@@ -23,6 +23,10 @@ npx tsx scripts/flow-check.mts       # integration self-check, see below
 - `prisma/dev.db` and `.env` are gitignored; a fresh clone needs `migrate dev` + `db:seed` + a `.env` copied from `.env.example` (`DATABASE_URL`, `AUTH_SECRET`, `CRON_SECRET`).
 - `scripts/flow-check.mts` is the real end-to-end check (checkout → payment verify → status transitions → cancel → expiry). Not run by vitest. Requires seeded DB, **deletes all orders/carts of demo user `nabila@contoh.id`**.
 
+## Git
+
+- **Selalu lakukan commit setiap ada perubahan yang selesai dikerjakan.** Jalankan `npm run test` → `npx tsc --noEmit` dulu, lalu commit dengan pesan yang menjelaskan perubahan tersebut. Jangan biarkan perubahan mengendap tanpa commit.
+
 ## Architecture
 
 - `src/app/(shop)` customer side, `src/app/admin` admin side (separate login at `/admin/masuk`), `src/app/api` route handlers.

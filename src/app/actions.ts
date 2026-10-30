@@ -171,7 +171,7 @@ export async function unggahBukti(prev: Hasil, formData: FormData): Promise<Hasi
 
   const file = formData.get("bukti");
   if (!(file instanceof File) || file.size === 0) {
-    return { error: "Pilih berkas bukti transfer terlebih dahulu." };
+    return { error: "Pilih berkas bukti pembayaran terlebih dahulu." };
   }
   if (file.size > MAX_BUKTI) {
     return { error: "Ukuran berkas terlalu besar. Maksimal 2 MB — foto ulang atau screenshot lebih kecil." };

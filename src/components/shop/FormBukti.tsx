@@ -29,9 +29,9 @@ export function FormBukti({ orderNo }: { orderNo: string }) {
   return (
     <form action={formAction} className="bg-permukaan border border-kakao/10 rounded-xl p-5 space-y-3">
       <input type="hidden" name="orderNo" value={orderNo} />
-      <h2 className="font-bold text-lg">Unggah bukti transfer</h2>
+      <h2 className="font-bold text-lg">Unggah bukti pembayaran</h2>
       <p className="text-sm text-teks2">
-        Foto struk atau screenshot mutasi rekening. Hanya <strong>JPG/PNG, maksimal 2 MB</strong>.
+        Screenshot struk pembayaran QRIS. Hanya <strong>JPG/PNG, maksimal 2 MB</strong>.
       </p>
       {state?.error && (
         <p role="alert" className="rounded-lg border border-error/40 bg-error/10 text-error px-4 py-3 text-sm">

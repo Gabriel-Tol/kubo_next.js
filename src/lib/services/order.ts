@@ -157,7 +157,7 @@ export async function terimaPembayaran(orderId: string, actorName: string) {
     throw new LayananError(`Pesanan bukan berstatus ${STATUS.MENUNGGU}.`);
   }
   const proof = order.proofs.find((p) => p.status === "SUBMITTED");
-  if (!proof) throw new LayananError("Belum ada bukti transfer yang diunggah.");
+  if (!proof) throw new LayananError("Belum ada bukti pembayaran yang diunggah.");
 
   await db.$transaction(async (tx) => {
     for (const item of order.items) {
@@ -185,7 +185,7 @@ export async function terimaPembayaran(orderId: string, actorName: string) {
         fromStatus: STATUS.MENUNGGU,
         toStatus: STATUS.DIKONFIRMASI,
         actorName,
-        note: "Pembayaran diterima (verifikasi mutasi rekening)",
+        note: "Pembayaran diterima (verifikasi manual QRIS)",
       },
     });
   });

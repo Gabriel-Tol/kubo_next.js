@@ -24,7 +24,7 @@ export default async function Beranda() {
         </h1>
         <p className="text-teks2 max-w-xl mx-auto">
           Pesan bolu untuk kumpul keluarga. Ambil di toko di Coblong atau kami antar ke
-          sekitar Bandung — pembayaran transfer manual, verifikasi oleh kami.
+          sekitar Bandung — pembayaran QRIS manual, verifikasi oleh kami.
         </p>
         <Link
           href="/katalog"

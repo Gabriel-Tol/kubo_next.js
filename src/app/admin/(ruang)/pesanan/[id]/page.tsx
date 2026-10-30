@@ -33,8 +33,6 @@ export default async function DetailPesananAdmin({
   });
   if (!order) notFound();
 
-  const setting = await db.setting.findMany();
-  const rekening = setting.find((x) => x.key === "rekening_demo")?.value ?? "Belum diatur";
   const bukti = order.proofs.find((p) => p.status === "SUBMITTED");
   const ditolak = order.proofs.filter((p) => p.status === "REJECTED");
   const lanjut = allowedNext(order.status, order.fulfillment as "PICKUP" | "DELIVERY");
@@ -81,16 +79,17 @@ export default async function DetailPesananAdmin({
             Yang harus diterima: <span className="font-bold text-aksen">{rupiah(order.total)}</span> (subtotal{" "}
             {rupiah(order.subtotal)} + ongkir {rupiah(order.deliveryFee)})
           </p>
-          <p className="font-mono text-xs break-all">Rekening tujuan: {rekening}</p>
+          <p className="font-mono text-xs break-all">Metode: QRIS (KUBO — Kue Bolu)</p>
           <p className="text-error text-xs">
-            Peringatan: teks di gambar bukti tidak dianggap verifikasi. Cocokkan dengan mutasi rekening bank sungguhan.
+            Peringatan: teks di gambar bukti tidak dianggap verifikasi. Cocokkan dengan mutasi QRIS di aplikasi
+            penyedia Anda.
           </p>
           <p className="text-teks2 text-xs">Batas bayar: {tanggalPanjang(order.paymentDueAt)} {jamWib(order.paymentDueAt)}</p>
         </div>
       </section>
 
       <section className="bg-permukaan border border-kakao/10 rounded-xl p-4 space-y-3">
-        <h2 className="font-bold text-base">Bukti transfer</h2>
+        <h2 className="font-bold text-base">Bukti pembayaran</h2>
         {!bukti ? (
           <p className="text-sm text-teks2">Belum ada bukti diunggah.</p>
         ) : (
@@ -99,7 +98,7 @@ export default async function DetailPesananAdmin({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`/api/berkas/bukti/${bukti.id}`}
-                alt={`Bukti transfer ${order.orderNo}`}
+                alt={`Bukti pembayaran ${order.orderNo}`}
                 className="max-h-80 rounded-lg border border-kakao/15 object-contain bg-kanvas"
               />
             </a>

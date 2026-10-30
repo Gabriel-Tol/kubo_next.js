@@ -55,7 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <p className="font-medium text-kakao">Bolu Hangat (KUBO)</p>
             <p>Jl. Melati No. 12, Coblong, Bandung 40132 · Buka 08.00–18.00 · WA {kontak}</p>
             <p className="mt-2">
-              Rekening demo — jangan transfer. Pembayaran diverifikasi manual oleh admin.
+              QRIS demo — jangan scan bayar sungguhan. Pembayaran diverifikasi manual oleh admin.
             </p>
           </div>
         </footer>

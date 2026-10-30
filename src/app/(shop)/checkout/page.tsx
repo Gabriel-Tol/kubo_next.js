@@ -56,7 +56,7 @@ export default async function Checkout() {
       <aside className="bg-permukaan border border-kakao/10 rounded-xl p-5 text-sm text-teks2 space-y-2 md:sticky md:top-20">
         <h2 className="font-bold text-lg text-kakao">Perlu diketahui</h2>
         <p>
-          Pembayaran lewat transfer bank manual. Setelah pesanan dibuat Anda punya <strong>60 menit</strong> untuk
+          Pembayaran lewat QRIS manual. Setelah pesanan dibuat Anda punya <strong>60 menit</strong> untuk
           unggah bukti, lalu diverifikasi admin (bukti masuk ≠ pembayaran disetujui).
         </p>
         <p>Stok dipotong saat pesanan dikonfirmasi admin, bukan saat checkout.</p>

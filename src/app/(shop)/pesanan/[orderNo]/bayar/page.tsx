@@ -27,7 +27,6 @@ export default async function Bayar({ params }: { params: Promise<{ orderNo: str
   const kedaluwarsa = order.paymentDueAt < new Date();
 
   const setting = await db.setting.findMany();
-  const rekening = setting.find((x) => x.key === "rekening_demo")?.value ?? "Belum diatur";
   const kontak = setting.find((x) => x.key === "kontak_toko")?.value ?? "-";
   const ditolak = order.proofs.find((p) => p.status === "REJECTED");
 
@@ -36,7 +35,7 @@ export default async function Bayar({ params }: { params: Promise<{ orderNo: str
       <div>
         <h1 className="text-3xl font-bold">Bayar pesanan {order.orderNo}</h1>
         <p className="text-teks2 mt-1">
-          Total transfer: <span className="font-bold text-aksen">{rupiah(order.total)}</span>
+          Total pembayaran: <span className="font-bold text-aksen">{rupiah(order.total)}</span>
         </p>
       </div>
 
@@ -49,24 +48,26 @@ export default async function Bayar({ params }: { params: Promise<{ orderNo: str
         </div>
       ) : (
         <>
-          <div className="bg-permukaan border border-kakao/10 rounded-xl p-5 space-y-2">
+          <div className="bg-permukaan border border-kakao/10 rounded-xl p-5 space-y-3">
             <HitungMundur dueIso={order.paymentDueAt.toISOString()} />
-            <p className="text-sm text-teks2">Rekening tujuan:</p>
-            <p className="font-mono text-sm break-all">{rekening}</p>
-            <p className="text-xs text-error">
-              Rekening demo — jangan transfer sungguhan. Konfirmasi ke admin via WA {kontak}.
+            <div className="flex flex-col items-center gap-3 py-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/qris-qr.webp"
+                alt={`QRIS KUBO untuk pembayaran ${order.orderNo}`}
+                className="w-60 h-60 border border-kakao/10 rounded-lg"
+              />
+              <p className="text-sm text-teks2 text-center">
+                Scan kode QRIS di atas memakai aplikasi bank atau e-wallet berlogo QRIS.
+              </p>
+            </div>
+            <p className="text-xs text-error text-center">
+              QRIS demo — jangan bayar sungguhan. Konfirmasi ke admin via WA {kontak}.
             </p>
-            <button
-              type="button"
-              onClick={() => navigator.clipboard?.writeText(rekening)}
-              className="min-h-11 rounded-lg border border-kakao/25 px-4 py-2 text-sm"
-            >
-              Salin rekening
-            </button>
             <ol className="text-sm text-teks2 list-decimal pl-5 pt-2 space-y-1">
-              <li>Buka aplikasi mBanking Anda, pilih Transfer.</li>
-              <li>Masukkan rekening tujuan di atas, transfer tepat {rupiah(order.total)}.</li>
-              <li>Simpan struk/screenshot, lalu unggah di bawah ini.</li>
+              <li>Buka aplikasi bank/e-wallet Anda, pilih Scan QRIS.</li>
+              <li>Scan kode di atas, bayar tepat {rupiah(order.total)}.</li>
+              <li>Simpan screenshot struk pembayaran, lalu unggah di bawah ini.</li>
             </ol>
           </div>
 
