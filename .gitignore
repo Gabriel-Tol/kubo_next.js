@@ -11,3 +11,5 @@ tsconfig.tsbuildinfo
 .taste-skill
 __pycache__/
 opencode.json
+.vercel
+.env*

@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../src/lib/password";
-
-const db = new PrismaClient();
+// Lewat lib/db agar memakai adapter Turso bila TURSO_AUTH_TOKEN ter-set (lihat src/lib/db.ts)
+import { db } from "../src/lib/db";
 
 async function main() {
   const zoneA = await db.deliveryZone.upsert({

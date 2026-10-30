@@ -61,7 +61,7 @@ Persiapan sekali di komputer:
 Di Vercel (import repositori GitHub):
 
 1. Environment Variables (Production & Preview): `DATABASE_URL` (URL Turso), `TURSO_AUTH_TOKEN`, `AUTH_SECRET`, `CRON_SECRET` — nilai sama dengan di atas.
-2. Deploy. `postinstall` menjalankan `prisma generate` otomatis; `vercel.json` menjadwalkan `GET /api/cron/expire-orders` tiap 5 menit (Vercel otomatis mengirim `Authorization: Bearer $CRON_SECRET`).
+2. Deploy. `postinstall` menjalankan `prisma generate` otomatis; `vercel.json` menjadwalkan `GET /api/cron/expire-orders` tiap tengah malam (plan Hobby Vercel hanya mengizinkan cron harian; Vercel otomatis mengirim `Authorization: Bearer $CRON_SECRET`).
 3. Cron butuh plan yang mendukung Vercel Cron; bila tidak ada, jalankan cron dari penyedia eksternal (mis. cron-job.org) dengan `POST /api/cron/expire-orders` + header `x-cron-secret`. Tanpa cron pun pesanan kedaluwarsa tetap dibatalkan lewat pemeriksaan lazy saat halaman dibuka.
 
 Catatan: bukti bayar disimpan sebagai blob di DB (`PaymentProof.data`), foto produk di `public/images/` — tidak ada yang bergantung pada disk lokal, jadi aman untuk serverless.
