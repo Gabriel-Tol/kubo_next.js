@@ -4,12 +4,12 @@
 
 | Atribut | Isi |
 |---|---|
-| Versi dokumen | 1.1 (draf) — tech stack diganti dari CodeIgniter 4 ke Next.js |
-| Tanggal | 26 Oktober 2026 |
+| Versi dokumen | 1.2 (draf) — disesuaikan dengan implementasi berjalan: pembayaran QRIS manual, foto produk lokal `public/images/`, 5 produk, domisili Pontianak, token tema + mode gelap |
+| Tanggal | 30 Oktober 2026 |
 | Sumber kebutuhan | Rancangan UI `My_Best.pdf` (pelanggan 360/768/1280 px, admin 1280/360 px, papan *states & handoff*) |
 | Framework | Next.js (App Router, TypeScript) |
 | Konteks | Studi kasus / tugas kuliah; toko tunggal, satu outlet di Pontianak |
-| Status nama & data | Nama toko "Bolu Hangat" (logo **KUBO**) bersifat **sementara**. Produk, harga, zona, rekening, kontak, dan jadwal adalah **data contoh** dan perlu dikonfirmasi pemilik toko |
+| Status nama & data | Nama toko "Bolu Hangat" (logo **KUBO**) bersifat **sementara**. Produk, harga, zona, kode QRIS, kontak, dan jadwal adalah **data contoh** dan perlu dikonfirmasi pemilik toko |
 
 > **Catatan penggunaan label.** `[ASUMSI]` = keputusan sementara agar PRD bisa dieksekusi; `[TBD]` = harus ditetapkan pemilik/dosen sebelum implementasi.
 
@@ -19,11 +19,11 @@
 
 ### 1.1 Problem Statement
 
-Toko kue bolu rumahan dengan satu outlet menerima pesanan secara manual (chat), sehingga rawan salah catat jumlah, ucapan, jadwal ambil/antar, dan sulit memverifikasi bukti transfer. Pemilik tidak memiliki ringkasan pesanan, status produksi, maupun riwayat yang rapi.
+Toko kue bolu rumahan dengan satu outlet menerima pesanan secara manual (chat), sehingga rawan salah catat jumlah, ucapan, jadwal ambil/antar, dan sulit memverifikasi bukti pembayaran. Pemilik tidak memiliki ringkasan pesanan, status produksi, maupun riwayat yang rapi.
 
 ### 1.2 Proposed Solution
 
-Web e-commerce berbahasa Indonesia berbasis **Next.js** dengan dua sisi: (a) **toko pelanggan** (katalog → keranjang → checkout ambil di toko / antar lokal → unggah bukti transfer manual → lacak status) dan (b) **ruang admin** (kelola produk, verifikasi pembayaran, ubah status pesanan, dashboard operasional). Pembayaran **transfer bank manual** diverifikasi admin; tanpa payment gateway, QRIS, GPS, voucher, atau antar kota.
+Web e-commerce berbahasa Indonesia berbasis **Next.js** dengan dua sisi: (a) **toko pelanggan** (katalog → keranjang → checkout ambil di toko / antar lokal → bayar via QRIS & unggah bukti → lacak status) dan (b) **ruang admin** (kelola produk, verifikasi pembayaran, ubah status pesanan, dashboard operasional). Pembayaran **QRIS manual** (kode statis, scan di aplikasi bank/e-wallet) diverifikasi admin; tanpa payment gateway/QRIS dinamis, GPS, voucher, atau antar kota.
 
 ### 1.3 Success Criteria (KPI)
 
@@ -32,7 +32,7 @@ Web e-commerce berbahasa Indonesia berbasis **Next.js** dengan dua sisi: (a) **t
 | K1 | Alur utama pelanggan end-to-end (daftar → pesan → unggah bukti → lihat status) berjalan | 100% skenario uji utama lulus (minimal 25 test case blackbox, 0 *blocker*) | Uji blackbox + Vitest + Playwright |
 | K2 | Waktu pelanggan terdaftar menyelesaikan pemesanan (keranjang → bukti terkirim) | ≤ 3 menit pada uji 5 responden | Uji kegunaan terjadwal |
 | K3 | Akurasi data pesanan (total, ongkir, ucapan, jadwal) antara layar checkout dan detail admin | 100% konsisten pada 30 pesanan uji | Uji perbandingan otomatis |
-| K4 | Waktu muat halaman katalog (6 produk) pada server lokal/hosting uji | p95 ≤ 2 detik (jaringan 4G simulasi) | Lighthouse / DevTools |
+| K4 | Waktu muat halaman katalog (5 produk) pada server lokal/hosting uji | p95 ≤ 2 detik (jaringan 4G simulasi) | Lighthouse / DevTools |
 | K5 | Aksesibilitas halaman pelanggan | Skor Lighthouse Accessibility ≥ 90; kontras teks ≥ 4,5:1; target sentuh ≥ 44 px | Lighthouse + inspeksi manual |
 | K6 | Integritas stok | 0 kasus stok negatif pada uji 20 konfirmasi/pembatalan acak | Test otomatis model/service |
 
@@ -45,7 +45,7 @@ Web e-commerce berbahasa Indonesia berbasis **Next.js** dengan dua sisi: (a) **t
 | Persona | Deskripsi | Kebutuhan utama |
 |---|---|---|
 | **Pelanggan (mis. Nabila Putri)** | Pembeli lokal Pontianak, mobile-first (360 px), memesan bolu untuk acara keluarga | Memilih bolu cepat, menulis ucapan, memilih ambil/antar + slot waktu, tahu status pesanan jujur |
-| **Admin / Staf toko (mis. Ayu)** | Staf/pemilik yang memeriksa bukti transfer dan memproses pesanan, memakai desktop & sesekali ponsel | Antrian pesanan jelas, verifikasi pembayaran aman, ubah status tercatat, produk mudah diperbarui |
+| **Admin / Staf toko (mis. Ayu)** | Staf/pemilik yang memeriksa bukti pembayaran (QRIS) dan memproses pesanan, memakai desktop & sesekali ponsel | Antrian pesanan jelas, verifikasi pembayaran aman, ubah status tercatat, produk mudah diperbarui |
 | **Pemilik toko** | Pengambil keputusan aturan bisnis | Ringkasan penjualan, kontrol harga/stok, aturan batas bayar & ongkir |
 
 Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login berbeda).
@@ -62,14 +62,14 @@ Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login 
 #### Modul A — Katalog & Produk (Pelanggan)
 
 **US-01** — *Sebagai pelanggan, saya ingin melihat beranda toko agar tahu pilihan favorit dan cara menerima pesanan.*
-- Beranda menampilkan hero, chip kategori (Semua bolu, Bolu klasik, Bolu premium, Bolu gulung), 3 produk "Favorit dari oven", info Ambil di toko & Antar sekitar Anda.
+- Beranda menampilkan hero, chip kategori (Semua bolu + kategori aktif — kini hanya **Bolu klasik**), 3 produk "Favorit dari oven", info Ambil di toko & Antar sekitar Anda.
 - Tombol "Belanja bolu" mengarah ke katalog.
 - Menu: Beranda, Katalog, Pesanan, Akun; menu admin tidak pernah tampil di toko.
 
 **US-02** — *Sebagai pelanggan, saya ingin mencari, memfilter, dan mengurutkan bolu agar cepat menemukan rasa favorit.*
 - Pencarian berdasarkan nama (parsial, tidak peka huruf besar/kecil).
 - Filter kategori dan rentang harga (Rp0–Rp100.000); tombol "Terapkan filter" dan "Reset filter".
-- Urutan default: Nama A–Z; menampilkan jumlah hasil ("6 produk").
+- Urutan default: Nama A–Z; menampilkan jumlah hasil ("5 produk").
 - Produk habis tampil dengan label **Habis** dan tombol nonaktif "Stok habis".
 - Tanpa hasil: pesan "Belum ketemu." dengan tombol "Reset pencarian & filter".
 - Loading menggunakan kerangka kartu agar layout tidak melompat.
@@ -77,10 +77,10 @@ Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login 
 
 **US-03** — *Sebagai pelanggan, saya ingin melihat detail bolu dan memilih ukuran, jumlah, serta ucapan.*
 - Breadcrumb: Katalog / Kategori / Nama produk; label stok ("Tersedia 8 bolu ukuran 20 cm").
-- Pilihan varian (mis. 20 cm Rp85.000, 24 cm Rp120.000) memperbarui harga, perkiraan potongan, dan stok tersedia.
+- Pilihan varian (mis. 20 cm & 24 cm keduanya Rp20.000) memperbarui harga, perkiraan potongan, dan stok tersedia.
 - Jumlah minimal 1; tombol minus nonaktif saat 1; maksimal = stok varian (contoh 8); pesan "Jumlah maksimal tercapai" saat batas.
 - Catatan/ucapan opsional maksimal **150 karakter** dengan penghitung (mis. 24/150); >150 menampilkan error "Hapus setidaknya 1 karakter" dan tombol tambah ke keranjang tertahan.
-- Subtotal baris dihitung langsung (mis. 2 × Rp85.000 = Rp170.000).
+- Subtotal baris dihitung langsung (mis. 2 × Rp20.000 = Rp40.000).
 - Komposisi, alergen, dan saran penyimpanan ditampilkan.
 
 #### Modul B — Keranjang & Checkout
@@ -99,12 +99,13 @@ Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login 
 - Alamat di luar zona menampilkan "Area ini belum terlayani" dengan aksi "Ganti ke ambil di toko".
 - Pilih **tanggal** dan **slot waktu** (08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00). Slot **Lewat** (melewati batas pemesanan) dan **Penuh** tidak dapat dipilih.
 - Validasi sisi server untuk stok, harga, zona, alamat, dan slot sebelum pesanan dibuat; validasi kolom wajib menyebut sebab dan perbaikan (tidak hanya warna): nama wajib; HP 10–15 digit; email valid.
-- Ringkasan pesanan: item, ucapan, subtotal, ongkir, total (mis. Rp170.000 + Rp20.000 = Rp190.000).
+- Ringkasan pesanan: item, ucapan, subtotal, ongkir, total (mis. Rp40.000 + Rp20.000 = Rp60.000).
 
-**US-06** — *Sebagai pelanggan, saya ingin membayar lewat transfer manual dan mengunggah bukti.*
+**US-06** — *Sebagai pelanggan, saya ingin membayar lewat QRIS dan mengunggah bukti.*
 - Pesanan dibuat dengan status **Menunggu Pembayaran**, nomor format `#BH-DDMMYY-NNN` (mis. BH-161026-024).
-- Halaman bayar menampilkan batas waktu (**contoh 60 menit** sejak pesanan dibuat) dengan hitung mundur, rekening tujuan, tombol "Salin rekening", total transfer, dan cara pembayaran.
-- Unggah bukti: **hanya JPG/PNG, maksimal 2 MB**, divalidasi di klien **dan server**; pesan error spesifik untuk format salah dan ukuran terlalu besar; tombol "Ganti berkas".
+- Halaman bayar menampilkan batas waktu (**contoh 60 menit** sejak pesanan dibuat) dengan hitung mundur, **kode QRIS** (gambar hasil crop dari poster statis toko, `public/images/qris-qr.webp`, dengan quiet zone putih), total pembayaran, dan 3 langkah cara bayar (buka aplikasi bank/e-wallet berlogo QRIS → scan → bayar tepat total).
+- Karena QR statis tidak membawa nominal otomatis, pelanggan mengetik nominal sesuai total; halaman menampilkan peringatan "QRIS demo — jangan bayar sungguhan".
+- Unggah bukti: screenshot struk QRIS, **hanya JPG/PNG, maksimal 2 MB**, divalidasi di klien **dan server**; pesan error spesifik untuk format salah dan ukuran terlalu besar; tombol "Ganti berkas".
 - Setelah kirim: layar Konfirmasi menyatakan "Menunggu verifikasi manual — bukti terkirim bukan berarti pembayaran disetujui".
 - Pelanggan dapat mengunggah ulang bila bukti ditolak selama batas waktu belum habis.
 - Bila batas waktu habis tanpa pembayaran diterima, pesanan otomatis **Dibatalkan** (alasan "Batas pembayaran berakhir") dan tersedia "Buat pesanan baru".
@@ -136,15 +137,15 @@ Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login 
 
 **US-11** — *Sebagai admin, saya ingin mengelola produk, varian, dan kategori tanpa kehilangan riwayat pesanan.*
 - Daftar produk: cari, filter kategori & status, kolom varian/harga, stok/status, aksi Edit & Arsipkan; tautan "Arsip (n)".
-- Form tambah/edit: nama*, deskripsi*, komposisi* (termasuk alergen), kategori*, varian (ukuran, harga > Rp0, stok) minimal satu varian aktif, foto produk (JPG/PNG, foto utama rasio 1:1), status publikasi.
-- Validasi: nama wajib, harga > Rp0, minimal satu foto utama; fokus ke error pertama, nilai lain tidak hilang.
+- Form tambah/edit: nama*, deskripsi*, komposisi* (termasuk alergen), kategori*, varian (ukuran, harga > Rp0, stok) minimal satu varian aktif, foto produk opsional (URL eksternal atau path lokal `/images/…`, rasio 1:1), status publikasi.
+- Validasi: nama wajib, harga > Rp0, `imageUrl` berupa URL valid atau path `/…` (boleh kosong); fokus ke error pertama, nilai lain tidak hilang.
 - **Arsip** menyembunyikan dari katalog; **tidak ada penghapusan** yang merusak riwayat. Pesanan lama memakai *snapshot* nama/harga saat pesanan dibuat.
 - Kelola kategori: tambah, ubah nama; kategori yang masih dipakai tidak dapat dihapus kecuali produk dipindahkan terlebih dahulu.
 
 **US-12** — *Sebagai admin, saya ingin memverifikasi pembayaran dengan teliti.*
-- Detail pesanan menampilkan bukti (pratinjau + "Perbesar bukti"), nominal yang harus diterima, rekening tujuan, pelanggan, penerimaan (alamat hanya untuk antar), item, ringkasan, dan riwayat perubahan.
+- Detail pesanan menampilkan bukti (pratinjau + "Perbesar bukti"), nominal yang harus diterima, metode QRIS, pelanggan, penerimaan (alamat hanya untuk antar), item, ringkasan, dan riwayat perubahan.
 - Aksi **Terima pembayaran** (→ Dikonfirmasi) dan **Tolak bukti** (wajib alasan; pesanan tetap Menunggu Pembayaran dan pelanggan bisa unggah ulang).
-- Teks di gambar bukti tidak dianggap verifikasi; admin mengonfirmasi lewat mutasi rekening (peringatan tampil di UI).
+- Teks di gambar bukti tidak dianggap verifikasi; admin mengonfirmasi lewat mutasi QRIS di aplikasi penyedia (peringatan tampil di UI).
 - Setiap perubahan status mencatat **waktu dan pelaku**.
 
 **US-13** — *Sebagai admin, saya ingin mengubah status pesanan sesuai urutan yang valid.*
@@ -161,7 +162,7 @@ Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login 
 
 ### 2.4 Non-Goals
 
-Tidak dibangun pada proyek ini: aplikasi native (Android/iOS), QRIS, payment gateway/pembayaran otomatis, voucher/promo, pelacakan GPS, pengiriman antar kota/kurir pihak ketiga, multi-outlet/multi-toko, ulasan & rating, notifikasi WhatsApp/SMS otomatis, program loyalitas, refund otomatis, serta multi-bahasa (hanya Bahasa Indonesia).
+Tidak dibangun pada proyek ini: aplikasi native (Android/iOS), payment gateway / pembayaran otomatis & QRIS dinamis (QRIS **statis manual** sudah dipakai), voucher/promo, pelacakan GPS, pengiriman antar kota/kurir pihak ketiga, multi-outlet/multi-toko, ulasan & rating, notifikasi WhatsApp/SMS otomatis, program loyalitas, refund otomatis, serta multi-bahasa (hanya Bahasa Indonesia).
 
 ### 2.5 Aturan Bisnis Utama
 
@@ -176,7 +177,7 @@ Tidak dibangun pada proyek ini: aplikasi native (Android/iOS), QRIS, payment gat
 | BR-07 | Slot **Lewat** (melewati batas pemesanan `[TBD: lead time]`) dan **Penuh** tidak dapat dipilih. |
 | BR-08 | Harga & nama produk pada pesanan adalah *snapshot*; perubahan katalog tidak mengubah pesanan lama. |
 | BR-09 | Produk tidak dihapus permanen jika pernah dipesan; gunakan arsip. |
-| BR-10 | Pembayaran hanya transfer bank manual; pesanan tanpa pembayaran dibatalkan setelah batas waktu. |
+| BR-10 | Pembayaran hanya QRIS manual (kode statis; nominal diketik sesuai total, verifikasi admin); pesanan tanpa pembayaran diterima dibatalkan setelah batas waktu. |
 
 ---
 
@@ -263,16 +264,15 @@ tests/  unit/, e2e/
 | `Address` | id, userId, label, recipientName, phone, street, zoneId (FK), landmark, isDefault |
 | `DeliveryZone` | id, name (Zona A/B), areaLabel (Pontianak Kota/Utara), fee, isActive |
 | `Category` | id, name, slug, sortOrder |
-| `Product` | id, categoryId, name, slug, description, composition, allergens, storageNote, isActive, archivedAt |
+| `Product` | id, categoryId, name, slug, description, composition, allergens, storageNote, imageUrl (opsional; URL eksternal atau path `/images/…`), isActive, archivedAt |
 | `ProductVariant` | id, productId, label (20 cm / 24 cm), price (>0), stock (≥0), servingNote, isActive |
-| `ProductImage` | id, productId, path, isPrimary, sortOrder |
 | `Cart`, `CartItem` | cartId, userId / guestToken, variantId, qty, note (≤150) |
 | `TimeSlot` | id, startTime, endTime, isActive; MVP: `isFull` manual; v1.1: kuota harian |
 | `Order` | id, orderNo (unik), userId, customerName/phone/email (snapshot), fulfillment (`PICKUP`/`DELIVERY`), scheduledDate, slotId, addressSnapshot, zoneId, deliveryFee, subtotal, total, status, paymentDueAt, cancelReason, stockDeducted (bool), createdAt |
 | `OrderItem` | orderId, variantId, productName, variantLabel, unitPrice (snapshot), qty, note, lineTotal |
 | `PaymentProof` | id, orderId, filePath, originalName, sizeBytes, mime, status (`SUBMITTED`/`ACCEPTED`/`REJECTED`), rejectReason, reviewedBy, reviewedAt, uploadedAt |
 | `OrderStatusLog` | id, orderId, fromStatus, toStatus, actorId/actorName, note, createdAt |
-| `Setting` | key/value: nama toko, alamat toko, jam buka, kontak, rekening demo, batas bayar (menit), lead time slot |
+| `Setting` | key/value: nama toko, alamat toko, jam buka, kontak, batas bayar (menit), lead time slot (rekening demo lama tidak lagi ditampilkan — pembayaran via QRIS statis) |
 | `StockAdjustment` *(v1.1)* | variantId, date, initialStock, delta, reason |
 | `SlotQuota` *(v1.1)* | slotId, date, quota |
 
@@ -354,15 +354,15 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 
 | Item | Spesifikasi |
 |---|---|
-| Palet | Kanvas `#FCF8F2`, Permukaan `#FFFFFF`, Kakao `#34231D`, Aksen `#A64220`, Teks sekunder `#74645A`, Sukses `#256046`, Error `#A32929` (jadikan CSS variables / token Tailwind) |
+| Palet | Token CSS + `@theme` Tailwind v4: Kanvas `#FDF9F3`, Permukaan `#FFFFFF`, Kakao `#34231D`, Aksen `#A23F1D`, Teks sekunder `#4F4441`, Sukses `#125138`, Error `#BA1A1A`, **Teks di atas warna solid `#FFFFFF` (token `atas`)** — menggantikan pemakaian `text-white` hard-coded. **Mode gelap** mengikuti `prefers-color-scheme` (kanvas `#16120F`, permukaan `#211C18`, kakao `#F4F0EA`, aksen `#FFB59E`) |
 | Tipografi | Lora (judul editorial), Inter (isi, formulir, navigasi, data). Display 38/58, Judul 30, Bagian 24, Isi 16/14, Metadata 12; line-height UI 1,5, display 1,12 |
 | Ritme | Skala 4/8/16/24/32/48 px; gutter 20 px (mobile), 40 px (tablet/desktop); gap kartu 12/20; radius kontrol 8, kartu 12, hero 20 |
 | Tata letak | Mobile satu kolom + katalog dua kolom; tablet katalog tiga kolom; desktop filter samping, checkout form + ringkasan; sidebar admin 220 px |
-| Interaksi | Tinggi minimal aksi & target sentuh 44 px; fokus terlihat (ring 2 px, jarak 3 px); tidak bergantung pada hover |
+| Interaksi | Tinggi minimal aksi & target sentuh 44 px; fokus terlihat (ring 2 px, jarak 3 px); tidak bergantung pada hover; transisi halus 200 ms & dukungan `prefers-reduced-motion` |
 | Status | Label teks wajib (Menunggu Pembayaran, Dikonfirmasi, Diproses, Siap Diambil, Sedang Diantar, Selesai, Dibatalkan, Habis), tidak hanya warna |
 | Komponen | `ProductCard`, `FormField`, `OrderRow`, `StatusBadge`, `SummaryRow` (nama semantik) |
 | Loading & kosong | `loading.tsx` dengan skeleton kartu agar layout tidak melompat; state kosong/tanpa hasil sesuai papan states |
-| Foto | Latar netral, cahaya alami, tanpa teks pada foto, rasio 1:1 katalog; gunakan `next/image` dengan dimensi tetap |
+| Foto | Latar netral, cahaya alami, tanpa teks pada foto, rasio 1:1 katalog; disajikan dengan `<img>` + kelas `aspect-square object-cover` (belum memakai `next/image`); foto disimpan di `public/images/` (`.webp`) |
 
 ### 4.9 Security & Privacy
 
@@ -373,7 +373,7 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 - Proteksi: validasi Zod di server, ORM ber-parameter (tanpa SQL mentah dari input), *output escaping* bawaan React (hindari `dangerouslySetInnerHTML`), *rate limiting* login/daftar/unggah, header keamanan (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
 - **Perlindungan data pribadi:** hanya nama, HP, email, alamat; persetujuan eksplisit saat daftar dan checkout; tidak ada data kartu/rekening pelanggan; log tidak menyimpan kata sandi atau isi bukti.
 - Rahasia (`DATABASE_URL`, `AUTH_SECRET`, `CRON_SECRET`) hanya di variabel lingkungan; tidak masuk repositori; hanya variabel berawalan `NEXT_PUBLIC_` yang terbuka ke klien.
-- Rekening pada rancangan adalah **rekening demo — jangan transfer**; rekening nyata diisi pemilik lewat pengaturan.
+- Kode QRIS pada rancangan adalah kode **demo — jangan bayar**; kode asli pemilik menggantikan `public/images/qris.webp`, lalu di-crop menjadi `qris-qr.webp` (quiet zone putih) untuk ditampilkan di halaman bayar.
 - Keamanan di atas merupakan **persyaratan implementasi**, bukan klaim fitur yang sudah berjalan.
 
 ### 4.10 Non-Functional Requirements
@@ -396,9 +396,9 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 
 | Fase | Cakupan |
 |---|---|
-| **MVP** | Beranda, katalog (cari/filter/urut), detail + varian + ucapan, keranjang persisten, daftar/masuk, akun & alamat, checkout ambil/antar dengan zona & slot, bayar manual + unggah bukti, konfirmasi, lacak, riwayat; admin: login, dashboard, produk + kategori, daftar & detail pesanan, verifikasi (terima/tolak), ubah status, pembatalan, kedaluwarsa otomatis, stok per varian manual dengan potong saat Dikonfirmasi |
+| **MVP** | Beranda, katalog (cari/filter/urut), detail + varian + ucapan, keranjang persisten, daftar/masuk, akun & alamat, checkout ambil/antar dengan zona & slot, bayar QRIS statis + unggah bukti, konfirmasi, lacak, riwayat; admin: login, dashboard, produk + kategori, daftar & detail pesanan, verifikasi (terima/tolak), ubah status, pembatalan, kedaluwarsa otomatis, stok per varian manual dengan potong saat Dikonfirmasi |
 | **v1.1** | Stok & kuota harian per tanggal produksi/slot (otomatis), laporan penjualan harian/bulanan + grafik, notifikasi email status |
-| **v2.0** | `[TBD]` Opsi pembayaran otomatis (QRIS/gateway), notifikasi WhatsApp, voucher — saat ini seluruhnya Non-Goals |
+| **v2.0** | `[TBD]` Opsi pembayaran otomatis (payment gateway / QRIS dinamis dengan nominal), notifikasi WhatsApp, voucher — saat ini seluruhnya Non-Goals |
 
 ### 5.2 Risiko Teknis & Bisnis
 
@@ -406,11 +406,11 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 |---|---|---|---|
 | R1 | **Stok tidak dicadangkan** sampai Dikonfirmasi; dua pelanggan dapat membayar untuk stok terakhir | Pesanan tidak dapat dipenuhi | Validasi ulang stok saat checkout & saat admin menerima; bila kurang, admin menolak dengan alasan dan menghubungi pelanggan (refund manual) `[TBD kebijakan]`. Alternatif: reservasi stok sampai batas bayar |
 | R2 | Verifikasi manual lambat/terlewat | Pesanan menggantung, pelanggan kesal | Penanda "Perlu verifikasi (n)" di dashboard, urutan bukti tertua, batas bayar jelas |
-| R3 | Bukti palsu/diedit | Kerugian finansial | Admin wajib mencocokkan mutasi rekening; peringatan UI; riwayat pelaku |
+| R3 | Bukti palsu/diedit | Kerugian finansial | Admin wajib mencocokkan mutasi QRIS; peringatan UI; riwayat pelaku |
 | R4 | Unggahan berkas berbahaya | Kompromi server | Validasi *magic bytes* berkas, simpan privat (bukan `public/`), nama acak, batas 2 MB |
 | R5 | Cron kedaluwarsa tidak berjalan atau hosting serverless tanpa disk persisten | Pesanan kedaluwarsa tidak dibatalkan; berkas bukti hilang | Pemeriksaan *lazy* + cron utama dengan `CRON_SECRET`; object storage bila serverless; log eksekusi |
 | R10 | Otorisasi hanya di middleware | Akses admin/pesanan orang lain bocor | Otorisasi wajib di DAL dan setiap Server Action/Route Handler; uji E2E akses lintas peran |
-| R6 | Aturan bisnis belum final (batas bayar, lead time slot, kebijakan refund, rekening) | Revisi ulang | Simpan di tabel `Setting`, bukan hard-code; kumpulkan keputusan di bagian 6 |
+| R6 | Aturan bisnis belum final (batas bayar, lead time slot, kebijakan refund, kode QRIS asli) | Revisi ulang | Simpan di tabel `Setting`, bukan hard-code; kumpulkan keputusan di bagian 6 |
 | R7 | Data demo ikut ke produksi | Informasi salah/menyesatkan | Pisahkan *seed* demo vs produksi; checklist rilis |
 | R8 | Zona ongkir hanya dua contoh | Penolakan pesanan sah | Tabel `delivery_zones` dapat dikelola; `[TBD]` daftar zona final |
 | R9 | Zona waktu & jam operasional | Slot/kedaluwarsa salah hitung | Gunakan `Asia/Jakarta` pada konfigurasi aplikasi dan DB |
@@ -428,7 +428,7 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 | Q5 | Pembatalan oleh pelanggan setelah Dikonfirmasi. | Hanya admin yang dapat membatalkan (pelanggan menghubungi toko) |
 | Q6 | Data stok pada layar Edit Produk (Marmer 24 cm = 4) dan papan Stok (4 tersedia) serta kolom "Terkonfirmasi" yang selalu 2 tampak sebagai data ilustrasi. | Diperlakukan sebagai *seed* contoh, bukan aturan |
 | Q7 | Satu pesanan dapat memuat banyak produk? Desain hanya memperlihatkan satu item. | Ya — keranjang multi-item didukung (tombol "Tambah bolu lainnya") |
-| Q8 | Nama toko final, domain, logo, kontak, rekening, jam buka. | `[TBD pemilik]`; tersimpan di `Setting` |
+| Q8 | Nama toko final, domain, logo, kontak, kode QRIS asli, jam buka. | `[TBD pemilik]`; tersimpan di `Setting` |
 | Q9 | Pengiriman email konfirmasi/notifikasi. | Di luar MVP |
 | Q10 | Hosting & domain produksi. | `[TBD]`; menentukan lokasi penyimpanan bukti (disk vs object storage) dan cara menjalankan cron |
 
@@ -436,16 +436,15 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 
 ## Lampiran A — Seed Data Contoh (dari Rancangan)
 
-| Produk | Kategori | Varian | Harga | Stok contoh |
-|---|---|---|---|---|
-| Bolu Marmer | Bolu klasik | 20 cm / 24 cm | Rp85.000 / Rp120.000 | 8 / 4 |
-| Bolu Pandan | Bolu klasik | 20 cm | Rp75.000 | 12 |
-| Bolu Cokelat | Bolu klasik | 20 cm | Rp90.000 | 6 |
-| Bolu Keju | Bolu premium | 20 cm | Rp95.000 | 5 |
-| Bolu Pisang | Bolu klasik | 20 cm | Rp80.000 | 0 (Habis) |
-| Bolu Gulung | Bolu gulung | 25 cm | Rp65.000 | 9 |
+| Produk | Kategori | Varian | Harga | Stok contoh | Foto (`public/images/`) |
+|---|---|---|---|---|---|
+| Bolu Marmer | Bolu klasik | 20 cm / 24 cm | Rp20.000 / Rp20.000 | 8 / 4 | `bolu-marmer-cokelat.webp` |
+| Bolu Pandan | Bolu klasik | 20 cm | Rp20.000 | 12 | `bolu-marmer-pandan.webp` |
+| Bolu Cokelat | Bolu klasik | 20 cm | Rp20.000 | 6 | `bolu-panggang-meses-cokelat.webp` |
+| Bolu Meses Warna-warni | Bolu klasik | 20 cm | Rp25.000 | 7 | `bolu-meses-warna-warni.webp` |
+| Bolu Pisang | Bolu klasik | 20 cm | Rp25.000 | 0 (Habis) | `bolu-pisang.webp` |
 
-Zona: **A — Pontianak Kota Rp10.000**, **B — Pontianak Utara Rp20.000**. Slot: 08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00. Toko: Jl. Melati No. 12, Pontianak Kota, Pontianak 78111, buka 08.00–18.00 (contoh).
+Kategori: hanya **Bolu klasik** (Bolu premium & Bolu gulung dihapus karena tidak ada produknya; Bolu Keju & Bolu Gulung dihapus dari seed). Zona: **A — Pontianak Kota Rp10.000**, **B — Pontianak Utara Rp20.000**. Slot: 08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00. Toko: Jl. Melati No. 12, Pontianak Kota, Pontianak 78111, buka 08.00–18.00 (contoh). Aset lain: `logo KUBO.webp`, poster `qris.webp` + hasil crop `qris-qr.webp` (dipakai halaman bayar).
 
 ## Lampiran B — Skenario Uji Utama (Ringkas)
 
@@ -453,7 +452,7 @@ Zona: **A — Pontianak Kota Rp10.000**, **B — Pontianak Utara Rp20.000**. Slo
 2. Daftar dengan kata sandi 7 karakter → ditolak; 8 karakter → berhasil.
 3. Jumlah 8 (stok 8) → tombol tambah nonaktif; ucapan 151 karakter → ditolak.
 4. Checkout ambil di toko: total = subtotal, ongkir Rp0.
-5. Checkout antar Zona B: total = subtotal + Rp20.000; alamat Lembang → "di luar layanan".
+5. Checkout antar Zona B: total = subtotal + Rp20.000; alamat Sambas → "di luar layanan".
 6. Slot Penuh/Lewat tidak dapat dipilih.
 7. Unggah PDF → ditolak; PNG 3,4 MB → ditolak; JPG 1,2 MB → diterima.
 8. Admin tolak bukti tanpa alasan → ditolak; dengan alasan → status tetap Menunggu Pembayaran, pelanggan dapat unggah ulang.
