@@ -31,6 +31,8 @@ export default async function LacakPesanan({ params }: { params: Promise<{ order
 
   const setting = await db.setting.findMany();
   const kontak = setting.find((x) => x.key === "kontak_toko")?.value ?? "-";
+  const waDigit = kontak.replace(/\D/g, "");
+  const wa = waDigit.startsWith("62") ? waDigit : "62" + waDigit.replace(/^0/, "");
   const antar = order.fulfillment === "DELIVERY";
   const tahapan = TAHAPAN.map((t) => (t === STATUS.SIAP && antar ? STATUS.DIANTAR : t));
   const idx = tahapan.indexOf(order.status);
@@ -100,7 +102,8 @@ export default async function LacakPesanan({ params }: { params: Promise<{ order
             </>
           ) : (
             <p>
-              Datang setelah status <strong>Siap Diambil</strong> ke Jl. Melati No. 12, Pontianak Kota. Tunjukkan
+              Datang setelah status <strong>Siap Diambil</strong> ke Lingga, Kec. Sungai Ambawang, Kabupaten Kubu
+              Raya. Tunjukkan
               nomor pesanan {order.orderNo}.
             </p>
           )}
@@ -109,7 +112,7 @@ export default async function LacakPesanan({ params }: { params: Promise<{ order
             {order.zone ? ` · ${order.zone.name} ${order.zone.areaLabel} · ongkir ${rupiah(order.deliveryFee)}` : ""}
           </p>
           <a
-            href={`https://wa.me/62${kontak.replace(/\D/g, "").replace(/^0/, "")}`}
+            href={`https://wa.me/${wa}`}
             className="inline-flex min-h-11 items-center rounded-lg border border-kakao/25 px-4 py-2"
           >
             Hubungi toko (WA {kontak})

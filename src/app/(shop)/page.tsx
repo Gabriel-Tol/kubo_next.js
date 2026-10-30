@@ -23,7 +23,7 @@ export default async function Beranda() {
           Bolu hangat langsung dari oven rumahan
         </h1>
         <p className="text-teks2 max-w-xl mx-auto">
-          Pesan bolu untuk kumpul keluarga. Ambil di toko di Pontianak Kota atau kami antar ke
+          Pesan bolu untuk kumpul keluarga. Ambil di toko di Sungai Ambawang atau kami antar ke
           sekitar Pontianak — pembayaran QRIS manual, verifikasi oleh kami.
         </p>
         <Link
@@ -76,7 +76,7 @@ export default async function Beranda() {
         <div className="bg-permukaan border border-kakao/10 rounded-xl p-6">
           <h3 className="text-xl font-bold mb-1">Ambil di toko</h3>
           <p className="text-sm text-teks2">
-            Jl. Melati No. 12, Pontianak Kota, Pontianak 78111 · Buka 08.00–18.00. Datang setelah
+            Lingga, Kec. Sungai Ambawang, Kabupaten Kubu Raya, Kalbar 78393 · Buka 08.00–18.00. Datang setelah
             status Siap Diambil, tunjukkan nomor pesanan. Tanpa biaya.
           </p>
         </div>

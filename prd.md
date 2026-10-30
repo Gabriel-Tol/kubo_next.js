@@ -444,7 +444,7 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 | Bolu Meses Warna-warni | Bolu klasik | 20 cm | Rp25.000 | 7 | `bolu-meses-warna-warni.webp` |
 | Bolu Pisang | Bolu klasik | 20 cm | Rp25.000 | 0 (Habis) | `bolu-pisang.webp` |
 
-Kategori: hanya **Bolu klasik** (Bolu premium & Bolu gulung dihapus karena tidak ada produknya; Bolu Keju & Bolu Gulung dihapus dari seed). Zona: **A — Pontianak Kota Rp10.000**, **B — Pontianak Utara Rp20.000**. Slot: 08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00. Toko: Jl. Melati No. 12, Pontianak Kota, Pontianak 78111, buka 08.00–18.00 (contoh). Aset lain: `logo KUBO.webp`, poster `qris.webp` + hasil crop `qris-qr.webp` (dipakai halaman bayar).
+Kategori: hanya **Bolu klasik** (Bolu premium & Bolu gulung dihapus karena tidak ada produknya; Bolu Keju & Bolu Gulung dihapus dari seed). Zona: **A — Pontianak Kota Rp10.000**, **B — Pontianak Utara Rp20.000**. Slot: 08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00. Toko: Lingga, Kec. Sungai Ambawang, Kabupaten Kubu Raya, Kalbar 78393, buka 08.00–18.00, WA +62 823-5218-1896. Aset lain: `logo KUBO.webp`, poster `qris.webp` + hasil crop `qris-qr.webp` (dipakai halaman bayar).
 
 ## Lampiran B — Skenario Uji Utama (Ringkas)
 

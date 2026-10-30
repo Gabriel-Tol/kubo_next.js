@@ -107,9 +107,9 @@ async function main() {
   const settings: Record<string, string> = {
     nama_toko: "Bolu Hangat",
     logo: "KUBO",
-    alamat_toko: "Jl. Melati No. 12, Pontianak Kota, Pontianak 78111",
+    alamat_toko: "Lingga, Kec. Sungai Ambawang, Kabupaten Kubu Raya, Kalbar 78393",
     jam_buka: "08.00–18.00",
-    kontak_toko: "0812-0000-0000",
+    kontak_toko: "+62 823-5218-1896",
     rekening_demo: "1234567890 a.n. Bolu Hangat (DEMO — jangan transfer)",
     batas_bayar_menit: "60",
   };

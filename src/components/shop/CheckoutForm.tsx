@@ -93,7 +93,7 @@ export function CheckoutForm({
 
         {fulfillment === "PICKUP" ? (
           <p className="text-sm text-teks2">
-            Jl. Melati No. 12, Pontianak Kota, Pontianak 78111 · Buka 08.00–18.00. Ongkir Rp0.
+            Lingga, Kec. Sungai Ambawang, Kabupaten Kubu Raya, Kalbar 78393 · Buka 08.00–18.00. Ongkir Rp0.
           </p>
         ) : (
           <div className="space-y-3">
