@@ -23,8 +23,8 @@ export default async function Beranda() {
           Bolu hangat langsung dari oven rumahan
         </h1>
         <p className="text-teks2 max-w-xl mx-auto">
-          Pesan bolu untuk kumpul keluarga. Ambil di toko di Coblong atau kami antar ke
-          sekitar Bandung — pembayaran QRIS manual, verifikasi oleh kami.
+          Pesan bolu untuk kumpul keluarga. Ambil di toko di Pontianak Kota atau kami antar ke
+          sekitar Pontianak — pembayaran QRIS manual, verifikasi oleh kami.
         </p>
         <Link
           href="/katalog"
@@ -76,14 +76,14 @@ export default async function Beranda() {
         <div className="bg-permukaan border border-kakao/10 rounded-xl p-6">
           <h3 className="text-xl font-bold mb-1">Ambil di toko</h3>
           <p className="text-sm text-teks2">
-            Jl. Melati No. 12, Coblong, Bandung 40132 · Buka 08.00–18.00. Datang setelah
+            Jl. Melati No. 12, Pontianak Kota, Pontianak 78111 · Buka 08.00–18.00. Datang setelah
             status Siap Diambil, tunjukkan nomor pesanan. Tanpa biaya.
           </p>
         </div>
         <div className="bg-permukaan border border-kakao/10 rounded-xl p-6">
           <h3 className="text-xl font-bold mb-1">Antar sekitar Anda</h3>
           <p className="text-sm text-teks2">
-            Zona A Coblong Rp10.000, Zona B Sukajadi Rp20.000. Pilih jadwal 08.00–17.00.
+            Zona A Pontianak Kota Rp10.000, Zona B Pontianak Utara Rp20.000. Pilih jadwal 08.00–17.00.
             Tanpa pelacakan GPS — kami konfirmasi lewat status pesanan.
           </p>
         </div>

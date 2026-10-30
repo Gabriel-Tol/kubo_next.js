@@ -8,7 +8,7 @@
 | Tanggal | 26 Oktober 2026 |
 | Sumber kebutuhan | Rancangan UI `My_Best.pdf` (pelanggan 360/768/1280 px, admin 1280/360 px, papan *states & handoff*) |
 | Framework | Next.js (App Router, TypeScript) |
-| Konteks | Studi kasus / tugas kuliah; toko tunggal, satu outlet di Bandung |
+| Konteks | Studi kasus / tugas kuliah; toko tunggal, satu outlet di Pontianak |
 | Status nama & data | Nama toko "Bolu Hangat" (logo **KUBO**) bersifat **sementara**. Produk, harga, zona, rekening, kontak, dan jadwal adalah **data contoh** dan perlu dikonfirmasi pemilik toko |
 
 > **Catatan penggunaan label.** `[ASUMSI]` = keputusan sementara agar PRD bisa dieksekusi; `[TBD]` = harus ditetapkan pemilik/dosen sebelum implementasi.
@@ -44,7 +44,7 @@ Web e-commerce berbahasa Indonesia berbasis **Next.js** dengan dua sisi: (a) **t
 
 | Persona | Deskripsi | Kebutuhan utama |
 |---|---|---|
-| **Pelanggan (mis. Nabila Putri)** | Pembeli lokal Bandung, mobile-first (360 px), memesan bolu untuk acara keluarga | Memilih bolu cepat, menulis ucapan, memilih ambil/antar + slot waktu, tahu status pesanan jujur |
+| **Pelanggan (mis. Nabila Putri)** | Pembeli lokal Pontianak, mobile-first (360 px), memesan bolu untuk acara keluarga | Memilih bolu cepat, menulis ucapan, memilih ambil/antar + slot waktu, tahu status pesanan jujur |
 | **Admin / Staf toko (mis. Ayu)** | Staf/pemilik yang memeriksa bukti transfer dan memproses pesanan, memakai desktop & sesekali ponsel | Antrian pesanan jelas, verifikasi pembayaran aman, ubah status tercatat, produk mudah diperbarui |
 | **Pemilik toko** | Pengambil keputusan aturan bisnis | Ringkasan penjualan, kontrol harga/stok, aturan batas bayar & ongkir |
 
@@ -95,7 +95,7 @@ Akun pelanggan **terpisah** dari akses admin (grup/peran berbeda, halaman login 
 **US-05** — *Sebagai pelanggan, saya ingin memilih ambil di toko atau antar lokal serta jadwalnya.*
 - Data pemesan (nama, HP, email) terisi otomatis dari akun dan tetap dapat diedit untuk pesanan itu.
 - **Ambil di toko**: menampilkan alamat toko, jam buka, ongkir Rp0.
-- **Antar lokal**: pilih alamat tersimpan atau isi baru; pilih **zona** (contoh: Zona A Coblong Rp10.000, Zona B Sukajadi Rp20.000); patokan opsional; ongkir tetap sesuai zona.
+- **Antar lokal**: pilih alamat tersimpan atau isi baru; pilih **zona** (contoh: Zona A Pontianak Kota Rp10.000, Zona B Pontianak Utara Rp20.000); patokan opsional; ongkir tetap sesuai zona.
 - Alamat di luar zona menampilkan "Area ini belum terlayani" dengan aksi "Ganti ke ambil di toko".
 - Pilih **tanggal** dan **slot waktu** (08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00). Slot **Lewat** (melewati batas pemesanan) dan **Penuh** tidak dapat dipilih.
 - Validasi sisi server untuk stok, harga, zona, alamat, dan slot sebelum pesanan dibuat; validasi kolom wajib menyebut sebab dan perbaikan (tidak hanya warna): nama wajib; HP 10–15 digit; email valid.
@@ -168,7 +168,7 @@ Tidak dibangun pada proyek ini: aplikasi native (Android/iOS), QRIS, payment gat
 | Kode | Aturan |
 |---|---|
 | BR-01 | Jumlah per item: min 1, maks = stok varian. Catatan maks 150 karakter. |
-| BR-02 | Ongkir tetap per zona; hanya zona terdaftar (contoh: A Coblong Rp10.000, B Sukajadi Rp20.000). Ambil di toko Rp0. |
+| BR-02 | Ongkir tetap per zona; hanya zona terdaftar (contoh: A Pontianak Kota Rp10.000, B Pontianak Utara Rp20.000). Ambil di toko Rp0. |
 | BR-03 | Total = subtotal item + ongkir. Ongkir **tidak** dihitung sebagai penjualan produk di laporan. |
 | BR-04 | Batas bayar default 60 menit sejak pesanan dibuat `[TBD pemilik]`. Lewat batas tanpa pembayaran diterima → Dibatalkan otomatis. |
 | BR-05 | Bukti masuk ≠ pembayaran terverifikasi. Hanya admin yang mengubah ke Dikonfirmasi. |
@@ -261,7 +261,7 @@ tests/  unit/, e2e/
 | `User` (+ `Account`/`Session` bila memakai adapter) | id, email (unik), passwordHash, role (`CUSTOMER`/`ADMIN`), createdAt |
 | `CustomerProfile` | userId (FK), fullName, phone |
 | `Address` | id, userId, label, recipientName, phone, street, zoneId (FK), landmark, isDefault |
-| `DeliveryZone` | id, name (Zona A/B), areaLabel (Coblong/Sukajadi), fee, isActive |
+| `DeliveryZone` | id, name (Zona A/B), areaLabel (Pontianak Kota/Utara), fee, isActive |
 | `Category` | id, name, slug, sortOrder |
 | `Product` | id, categoryId, name, slug, description, composition, allergens, storageNote, isActive, archivedAt |
 | `ProductVariant` | id, productId, label (20 cm / 24 cm), price (>0), stock (≥0), servingNote, isActive |
@@ -445,7 +445,7 @@ Skema Zod yang sama dipakai di klien (pesan error cepat) dan server (otoritatif)
 | Bolu Pisang | Bolu klasik | 20 cm | Rp80.000 | 0 (Habis) |
 | Bolu Gulung | Bolu gulung | 25 cm | Rp65.000 | 9 |
 
-Zona: **A — Coblong Rp10.000**, **B — Sukajadi Rp20.000**. Slot: 08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00. Toko: Jl. Melati No. 12, Coblong, Bandung 40132, buka 08.00–18.00 (contoh).
+Zona: **A — Pontianak Kota Rp10.000**, **B — Pontianak Utara Rp20.000**. Slot: 08.00–10.00, 10.00–12.00, 13.00–15.00, 15.00–17.00. Toko: Jl. Melati No. 12, Pontianak Kota, Pontianak 78111, buka 08.00–18.00 (contoh).
 
 ## Lampiran B — Skenario Uji Utama (Ringkas)
 

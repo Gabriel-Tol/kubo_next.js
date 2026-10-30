@@ -7,12 +7,12 @@ async function main() {
   const zoneA = await db.deliveryZone.upsert({
     where: { id: "zone-a" },
     update: {},
-    create: { id: "zone-a", name: "Zona A", areaLabel: "Coblong", fee: 10000 },
+    create: { id: "zone-a", name: "Zona A", areaLabel: "Pontianak Kota", fee: 10000 },
   });
   const zoneB = await db.deliveryZone.upsert({
     where: { id: "zone-b" },
     update: {},
-    create: { id: "zone-b", name: "Zona B", areaLabel: "Sukajadi", fee: 20000 },
+    create: { id: "zone-b", name: "Zona B", areaLabel: "Pontianak Utara", fee: 20000 },
   });
   void zoneA;
   void zoneB;
@@ -108,7 +108,7 @@ async function main() {
   const settings: Record<string, string> = {
     nama_toko: "Bolu Hangat",
     logo: "KUBO",
-    alamat_toko: "Jl. Melati No. 12, Coblong, Bandung 40132",
+    alamat_toko: "Jl. Melati No. 12, Pontianak Kota, Pontianak 78111",
     jam_buka: "08.00–18.00",
     kontak_toko: "0812-0000-0000",
     rekening_demo: "1234567890 a.n. Bolu Hangat (DEMO — jangan transfer)",

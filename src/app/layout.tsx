@@ -6,8 +6,8 @@ import { getSession } from "@/lib/auth";
 import { getKeranjang } from "@/lib/services/cart";
 
 export const metadata: Metadata = {
-  title: "Bolu Hangat (KUBO) — Bolu rumahan Bandung",
-  description: "Pesan bolu segar dari oven, ambil di toko atau antar sekitar Bandung.",
+  title: "Bolu Hangat (KUBO) — Bolu rumahan Pontianak",
+  description: "Pesan bolu segar dari oven, ambil di toko atau antar sekitar Pontianak.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -53,7 +53,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <footer className="bg-permukaan mt-12">
           <div className="mx-auto max-w-6xl px-5 lg:px-10 py-6 text-sm text-teks2">
             <p className="font-medium text-kakao">Bolu Hangat (KUBO)</p>
-            <p>Jl. Melati No. 12, Coblong, Bandung 40132 · Buka 08.00–18.00 · WA {kontak}</p>
+            <p>Jl. Melati No. 12, Pontianak Kota, Pontianak 78111 · Buka 08.00–18.00 · WA {kontak}</p>
             <p className="mt-2">
               QRIS demo — jangan scan bayar sungguhan. Pembayaran diverifikasi manual oleh admin.
             </p>

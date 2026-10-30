@@ -100,7 +100,7 @@ export default async function LacakPesanan({ params }: { params: Promise<{ order
             </>
           ) : (
             <p>
-              Datang setelah status <strong>Siap Diambil</strong> ke Jl. Melati No. 12, Coblong, Bandung. Tunjukkan
+              Datang setelah status <strong>Siap Diambil</strong> ke Jl. Melati No. 12, Pontianak Kota. Tunjukkan
               nomor pesanan {order.orderNo}.
             </p>
           )}

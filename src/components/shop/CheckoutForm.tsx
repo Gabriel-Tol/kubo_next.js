@@ -93,7 +93,7 @@ export function CheckoutForm({
 
         {fulfillment === "PICKUP" ? (
           <p className="text-sm text-teks2">
-            Jl. Melati No. 12, Coblong, Bandung 40132 · Buka 08.00–18.00. Ongkir Rp0.
+            Jl. Melati No. 12, Pontianak Kota, Pontianak 78111 · Buka 08.00–18.00. Ongkir Rp0.
           </p>
         ) : (
           <div className="space-y-3">
@@ -125,7 +125,7 @@ export function CheckoutForm({
                 rows={3}
                 defaultValue={alamatAwal}
                 required
-                placeholder="mis. Jl. Cempaka No. 5, RT 03/RW 01, Coblong"
+                placeholder="mis. Jl. Cempaka No. 5, RT 03/RW 01, Pontianak Kota"
                 className="w-full rounded-lg border border-kakao/25 px-3 py-2"
               />
               <p className="text-xs text-teks2 mt-1">
