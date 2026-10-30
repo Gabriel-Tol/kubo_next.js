@@ -38,7 +38,7 @@ npx tsx scripts/flow-check.mts       # integration self-check, see below
 ## Gotchas
 
 - Stock is cut at payment **confirmation** (atomic conditional update), not at checkout; cancel-after-confirmation returns it; expiry before confirmation never touched it. Preserve those invariants when touching `services/order.ts`.
-- Payment proofs are written to `./storage/bukti` (gitignored, local disk — object storage required for serverless deploy) and served only through the authorized `/api/berkas/bukti/[id]` route, never `public/`. Uploads check magic bytes and cap at 2 MB.
+- Payment proofs are stored as a `Bytes` blob in the DB (`PaymentProof.data`) — serverless-friendly — and served only through the authorized `/api/berkas/bukti/[id]` route, never `public/`. Uploads check magic bytes and cap at 2 MB.
 - Order expiry: cron `POST /api/cron/expire-orders` with header `x-cron-secret: $CRON_SECRET`, plus lazy checks in pages. Both paths must keep working.
 - Tests cover only the pure status/total engines; DB-dependent flows are verified manually via `scripts/flow-check.mts`.
 - `.opencode/skills/ui-ux-pro-max` is installed for UI/design work — use it for page and component design tasks.

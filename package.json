@@ -7,16 +7,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "test": "vitest run",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset --force"
+    "db:reset": "prisma migrate reset --force",
+    "db:push": "prisma db push"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "@next/swc-win32-x64-msvc": "^16.4.3",
+    "@prisma/adapter-libsql": "^7.10.1",
     "@prisma/client": "^6.19.3",
     "next": "^16.4.3",
     "react": "^19.3.1",

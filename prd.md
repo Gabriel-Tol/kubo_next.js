@@ -270,7 +270,7 @@ tests/  unit/, e2e/
 | `TimeSlot` | id, startTime, endTime, isActive; MVP: `isFull` manual; v1.1: kuota harian |
 | `Order` | id, orderNo (unik), userId, customerName/phone/email (snapshot), fulfillment (`PICKUP`/`DELIVERY`), scheduledDate, slotId, addressSnapshot, zoneId, deliveryFee, subtotal, total, status, paymentDueAt, cancelReason, stockDeducted (bool), createdAt |
 | `OrderItem` | orderId, variantId, productName, variantLabel, unitPrice (snapshot), qty, note, lineTotal |
-| `PaymentProof` | id, orderId, filePath, originalName, sizeBytes, mime, status (`SUBMITTED`/`ACCEPTED`/`REJECTED`), rejectReason, reviewedBy, reviewedAt, uploadedAt |
+| `PaymentProof` | id, orderId, data (Bytes — blob JPG/PNG ≤ 2 MB), originalName, sizeBytes, mime, status (`SUBMITTED`/`ACCEPTED`/`REJECTED`), rejectReason, reviewedBy, reviewedAt, uploadedAt |
 | `OrderStatusLog` | id, orderId, fromStatus, toStatus, actorId/actorName, note, createdAt |
 | `Setting` | key/value: nama toko, alamat toko, jam buka, kontak, batas bayar (menit), lead time slot (rekening demo lama tidak lagi ditampilkan — pembayaran via QRIS statis) |
 | `StockAdjustment` *(v1.1)* | variantId, date, initialStock, delta, reason |

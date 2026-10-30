@@ -88,7 +88,7 @@ cek("jadwal hari ini yang sudah lewat ditolak", slotKemarinDitolak);
 
 // 2. bukti SUBMITTED → verifikasi
 await db.paymentProof.create({
-  data: { orderId: order.id, filePath: "storage/bukti/uji.jpg", originalName: "bukti.jpg", sizeBytes: 1000, mime: "image/jpeg", status: "SUBMITTED" },
+  data: { orderId: order.id, data: Buffer.from("bukti-uji"), originalName: "bukti.jpg", sizeBytes: 1000, mime: "image/jpeg", status: "SUBMITTED" },
 });
 await terimaPembayaran(order.id, "Admin");
 const setelah = await db.order.findUniqueOrThrow({ where: { id: order.id }, include: { proofs: true, logs: true } });

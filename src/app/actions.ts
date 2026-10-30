@@ -188,19 +188,11 @@ export async function unggahBukti(prev: Hasil, formData: FormData): Promise<Hasi
     return { error: "Isi berkas bukan gambar JPG/PNG yang sah. Unggah ulang foto bukti asli." };
   }
 
-  const { randomBytes } = await import("node:crypto");
-  const { mkdir, writeFile } = await import("node:fs/promises");
-  const path = await import("node:path");
-  const namaAcak = randomBytes(16).toString("hex") + (mime === "image/png" ? ".png" : ".jpg");
-  const dir = path.join(process.cwd(), "storage", "bukti");
-  await mkdir(dir, { recursive: true });
-  const rel = path.join("storage", "bukti", namaAcak);
-  await writeFile(path.join(process.cwd(), rel), buf);
-
+  // Disimpan sebagai blob di DB (serverless-friendly; disk lokal tidak persisten di Vercel)
   await db.paymentProof.create({
     data: {
       orderId: order.id,
-      filePath: rel,
+      data: buf,
       originalName: file.name,
       sizeBytes: file.size,
       mime,

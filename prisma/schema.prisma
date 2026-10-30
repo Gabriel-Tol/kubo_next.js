@@ -162,7 +162,7 @@ model OrderItem {
 model PaymentProof {
   id           String    @id @default(cuid())
   orderId      String
-  filePath     String
+  data         Bytes // gambar JPG/PNG (maks 2 MB) — disimpan di DB agar serverless-friendly
   originalName String
   sizeBytes    Int
   mime         String

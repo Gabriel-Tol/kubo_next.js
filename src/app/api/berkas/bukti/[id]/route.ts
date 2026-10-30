@@ -1,10 +1,9 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
-// Bukti disimpan privat; hanya pemilik pesanan atau admin yang boleh membaca (PRD 4.9).
+// Bukti disimpan privat sebagai blob di DB; hanya pemilik pesanan atau admin
+// yang boleh membaca (PRD 4.9).
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const s = await getSession();
@@ -16,9 +15,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     return new NextResponse("Forbidden", { status: 403 });
   }
 
-  // filePath selalu "storage/bukti/<nama-acak>"; baca hanya dari subfolder itu.
-  const buf = await readFile(path.join(process.cwd(), "storage", "bukti", path.basename(proof.filePath)));
-  return new NextResponse(new Uint8Array(buf), {
+  return new NextResponse(new Uint8Array(proof.data), {
     headers: {
       "Content-Type": proof.mime,
       "Cache-Control": "private, no-store",
