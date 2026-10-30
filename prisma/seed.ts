@@ -19,8 +19,6 @@ async function main() {
 
   const kategori = [
     { name: "Bolu klasik", slug: "bolu-klasik", sortOrder: 1 },
-    { name: "Bolu premium", slug: "bolu-premium", sortOrder: 2 },
-    { name: "Bolu gulung", slug: "bolu-gulung", sortOrder: 3 },
   ];
   const kat: Record<string, string> = {};
   for (const k of kategori) {
@@ -36,9 +34,10 @@ async function main() {
       description: "Bolu marmer lembut dengan aroma butter, motif marmer klasik.",
       composition: "Tepung terigu, telur, gula, butter, cokelat, susu",
       allergens: "Gluten, telur, susu",
+      imageUrl: "/images/bolu-marmer-cokelat.webp",
       variants: [
-        { label: "20 cm", price: 85000, stock: 8 },
-        { label: "24 cm", price: 120000, stock: 4 },
+        { label: "20 cm", price: 20000, stock: 8 },
+        { label: "24 cm", price: 20000, stock: 4 },
       ],
     },
     {
@@ -48,7 +47,8 @@ async function main() {
       description: "Bolu pandan wangi dengan krim kelapa muda.",
       composition: "Tepung terigu, telur, gula, santan, pasta pandan",
       allergens: "Gluten, telur",
-      variants: [{ label: "20 cm", price: 75000, stock: 12 }],
+      imageUrl: "/images/bolu-marmer-pandan.webp",
+      variants: [{ label: "20 cm", price: 20000, stock: 12 }],
     },
     {
       name: "Bolu Cokelat",
@@ -57,16 +57,18 @@ async function main() {
       description: "Bolu cokelat fudgy dengan lelehan cokelat gelap.",
       composition: "Tepung terigu, telur, gula, cokelat, butter, susu",
       allergens: "Gluten, telur, susu",
-      variants: [{ label: "20 cm", price: 90000, stock: 6 }],
+      imageUrl: "/images/bolu-panggang-meses-cokelat.webp",
+      variants: [{ label: "20 cm", price: 20000, stock: 6 }],
     },
     {
-      name: "Bolu Keju",
-      slug: "bolu-keju",
-      categoryId: kat["Bolu premium"],
-      description: "Bolu premium tabur keju cheddar parut melimpah.",
-      composition: "Tepung terigu, telur, gula, butter, keju cheddar, susu",
+      name: "Bolu Meses Warna-warni",
+      slug: "bolu-meses-warna-warni",
+      categoryId: kat["Bolu klasik"],
+      description: "Bolu tabur meses warna-warni, ceria dan cocok untuk hadiah.",
+      composition: "Tepung terigu, telur, gula, butter, meses, sukade",
       allergens: "Gluten, telur, susu",
-      variants: [{ label: "20 cm", price: 95000, stock: 5 }],
+      imageUrl: "/images/bolu-meses-warna-warni.webp",
+      variants: [{ label: "20 cm", price: 25000, stock: 7 }],
     },
     {
       name: "Bolu Pisang",
@@ -75,16 +77,8 @@ async function main() {
       description: "Bolu pisang ambon matang, manis alami tanpa pemanis buatan.",
       composition: "Tepung terigu, telur, pisang ambon, gula, butter",
       allergens: "Gluten, telur, susu",
-      variants: [{ label: "20 cm", price: 80000, stock: 0 }],
-    },
-    {
-      name: "Bolu Gulung",
-      slug: "bolu-gulung",
-      categoryId: kat["Bolu gulung"],
-      description: "Bolu gulung isi selai nanas, tekstur empuk tidak kering.",
-      composition: "Tepung terigu, telur, gula, selai nanas, butter",
-      allergens: "Gluten, telur, susu",
-      variants: [{ label: "25 cm", price: 65000, stock: 9 }],
+      imageUrl: "/images/bolu-pisang.webp",
+      variants: [{ label: "20 cm", price: 25000, stock: 0 }],
     },
   ];
 
@@ -92,7 +86,7 @@ async function main() {
     const { variants, ...data } = p;
     const product = await db.product.upsert({
       where: { slug: p.slug },
-      update: {},
+      update: { imageUrl: data.imageUrl ?? null },
       create: {
         ...data,
         variants: { create: variants },
@@ -147,7 +141,7 @@ async function main() {
     },
   });
 
-  console.log("Seed selesai: 6 produk, 2 zona, 4 slot, admin & pelanggan demo.");
+  console.log("Seed selesai: 5 produk, 2 zona, 4 slot, admin & pelanggan demo.");
 }
 
 main()

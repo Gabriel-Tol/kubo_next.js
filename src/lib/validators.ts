@@ -49,7 +49,11 @@ export const produkSchema = z.object({
   composition: z.string().min(1, "Komposisi wajib diisi"),
   allergens: z.string().optional(),
   storageNote: z.string().optional(),
-  imageUrl: z.string().url("URL gambar tidak valid").or(z.literal("")).optional(),
+  // Terima URL eksternal atau path lokal "/images/…"
+  imageUrl: z
+    .string()
+    .refine((v) => v === "" || v.startsWith("/") || URL.canParse(v), "URL gambar tidak valid")
+    .optional(),
   isActive: z.boolean(),
   // JSON string dari array varian (dikirim input tersembunyi oleh form admin)
   variants: z.string().min(1, "Minimal satu varian wajib diisi"),
