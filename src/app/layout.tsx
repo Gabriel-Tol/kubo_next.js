@@ -55,7 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <p className="font-medium text-kakao">Bolu Hangat (KUBO)</p>
             <p>Lingga, Kec. Sungai Ambawang, Kabupaten Kubu Raya, Kalbar 78393 · Buka 08.00–18.00 · WA {kontak}</p>
             <p className="mt-2">
-              QRIS demo — jangan scan bayar sungguhan. Pembayaran diverifikasi manual oleh admin.
+              Pembayaran diverifikasi manual oleh admin.
             </p>
           </div>
         </footer>

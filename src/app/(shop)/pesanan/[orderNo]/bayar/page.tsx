@@ -62,7 +62,7 @@ export default async function Bayar({ params }: { params: Promise<{ orderNo: str
               </p>
             </div>
             <p className="text-xs text-error text-center">
-              QRIS demo — jangan bayar sungguhan. Konfirmasi ke admin via WA {kontak}.
+              Konfirmasi ke admin via WA {kontak} setelah membayar.
             </p>
             <ol className="text-sm text-teks2 list-decimal pl-5 pt-2 space-y-1">
               <li>Buka aplikasi bank/e-wallet Anda, pilih Scan QRIS.</li>
