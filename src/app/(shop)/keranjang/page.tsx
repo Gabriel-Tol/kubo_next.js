@@ -40,7 +40,7 @@ export default async function Keranjang({ searchParams }: { searchParams: Promis
           <p className="font-judul text-2xl">Keranjang masih kosong.</p>
           <Link
             href="/katalog"
-            className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-white font-medium px-5 py-2"
+            className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-atas font-medium px-5 py-2"
           >
             Jelajahi katalog
           </Link>
@@ -104,14 +104,14 @@ export default async function Keranjang({ searchParams }: { searchParams: Promis
             {s ? (
               <Link
                 href="/checkout"
-                className="block text-center min-h-11 rounded-lg bg-aksen text-white font-medium px-5 py-3"
+                className="block text-center min-h-11 rounded-lg bg-aksen text-atas font-medium px-5 py-3"
               >
                 Lanjut ke checkout
               </Link>
             ) : (
               <Link
                 href="/masuk?next=/checkout"
-                className="block text-center min-h-11 rounded-lg bg-aksen text-white font-medium px-5 py-3"
+                className="block text-center min-h-11 rounded-lg bg-aksen text-atas font-medium px-5 py-3"
               >
                 Masuk untuk checkout
               </Link>

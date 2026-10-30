@@ -31,7 +31,7 @@ export default async function AdminProduk({
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-3xl font-bold flex-1">Produk</h1>
-        <Link href="/admin/produk/baru" className="min-h-11 inline-flex items-center rounded-lg bg-aksen text-white font-medium px-5 py-2">
+        <Link href="/admin/produk/baru" className="min-h-11 inline-flex items-center rounded-lg bg-aksen text-atas font-medium px-5 py-2">
           Tambah produk
         </Link>
       </div>

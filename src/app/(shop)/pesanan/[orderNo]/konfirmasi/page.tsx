@@ -30,7 +30,7 @@ export default async function Konfirmasi({ params }: { params: Promise<{ orderNo
         <div className="flex gap-2 justify-center pt-2">
           <Link
             href={`/pesanan/${order.orderNo}`}
-            className="min-h-11 inline-flex items-center rounded-lg bg-aksen text-white font-medium px-5 py-2"
+            className="min-h-11 inline-flex items-center rounded-lg bg-aksen text-atas font-medium px-5 py-2"
           >
             Lacak status pesanan
           </Link>

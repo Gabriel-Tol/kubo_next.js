@@ -7,3 +7,6 @@ storage/bukti
 prisma/dev.db
 prisma/dev.db-journal
 tsconfig.tsbuildinfo
+
+.taste-skill
+__pycache__/

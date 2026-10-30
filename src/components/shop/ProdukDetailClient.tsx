@@ -119,7 +119,7 @@ export function ProdukDetailClient({
           <button
             type="submit"
             disabled={lewatBatas || v.stock <= 0}
-            className="min-h-11 rounded-lg bg-aksen text-white font-medium px-6 py-3 disabled:opacity-50"
+            className="min-h-11 rounded-lg bg-aksen text-atas font-medium px-6 py-3 disabled:opacity-50"
           >
             {v.stock <= 0 ? "Stok habis" : "Tambah ke keranjang"}
           </button>

@@ -52,7 +52,7 @@ export default async function Riwayat({ searchParams }: { searchParams: Promise<
       {daftar.length === 0 ? (
         <div className="bg-permukaan border border-kakao/10 rounded-xl p-10 text-center space-y-3">
           <p className="font-judul text-2xl">Belum ada pesanan.</p>
-          <Link href="/katalog" className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-white font-medium px-5 py-2">
+          <Link href="/katalog" className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-atas font-medium px-5 py-2">
             Belanja bolu
           </Link>
         </div>

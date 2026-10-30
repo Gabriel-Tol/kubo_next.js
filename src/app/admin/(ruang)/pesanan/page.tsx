@@ -68,7 +68,7 @@ export default async function AdminPesanan({
         <Link
           href={sp.perlu === "1" ? "/admin/pesanan" : "/admin/pesanan?perlu=1"}
           className={`min-h-11 inline-flex items-center rounded-lg px-4 py-2 border text-sm ${
-            sp.perlu === "1" ? "bg-error text-white border-error" : "bg-permukaan border-kakao/25"
+            sp.perlu === "1" ? "bg-error text-atas border-error" : "bg-permukaan border-kakao/25"
           }`}
         >
           Perlu verifikasi ({perluVerifikasi})

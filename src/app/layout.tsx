@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="id">
       <body className="min-h-screen flex flex-col">
-        <header className="border-b border-kakao/10 bg-permukaan sticky top-0 z-10">
+        <header className="bg-permukaan sticky top-0 z-10">
           <div className="mx-auto max-w-6xl px-5 lg:px-10 py-3 flex items-center gap-4">
             <Link href="/" className="font-judul text-xl font-bold text-aksen">
               KUBO
@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </header>
         <main className="flex-1 mx-auto w-full max-w-6xl px-5 lg:px-10 py-6">{children}</main>
-        <footer className="border-t border-kakao/10 bg-permukaan mt-12">
+        <footer className="bg-permukaan mt-12">
           <div className="mx-auto max-w-6xl px-5 lg:px-10 py-6 text-sm text-teks2">
             <p className="font-medium text-kakao">Bolu Hangat (KUBO)</p>
             <p>Jl. Melati No. 12, Coblong, Bandung 40132 · Buka 08.00–18.00 · WA {kontak}</p>

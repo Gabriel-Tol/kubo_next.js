@@ -22,8 +22,7 @@ export function ProductCard({ slug, nama, kategori, hargaMin, stok, imageUrl }: 
         <img src={imageUrl} alt={nama} className="aspect-square w-full object-cover" />
       ) : (
         <div
-          className="aspect-square w-full flex items-center justify-center text-5xl font-judul text-kanvas"
-          style={{ backgroundColor: "#34231D" }}
+          className="aspect-square w-full flex items-center justify-center text-5xl font-judul text-kanvas bg-kakao"
           aria-hidden="true"
         >
           {nama.replace(/^Bolu\s+/i, "").charAt(0)}

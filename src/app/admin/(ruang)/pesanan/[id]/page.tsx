@@ -112,7 +112,7 @@ export default async function DetailPesananAdmin({
             <div className="flex flex-wrap gap-2">
               <form action={verifikasiBayar}>
                 <input type="hidden" name="orderId" value={order.id} />
-                <button className="min-h-11 rounded-lg bg-sukses text-white font-medium px-5 py-2">
+                <button className="min-h-11 rounded-lg bg-sukses text-atas font-medium px-5 py-2">
                   Terima pembayaran
                 </button>
               </form>

@@ -41,7 +41,7 @@ export function FormMasuk({ next }: { next?: string }) {
       </div>
       <button
         disabled={pending}
-        className="w-full min-h-11 rounded-lg bg-aksen text-white font-medium py-3 disabled:opacity-50"
+        className="w-full min-h-11 rounded-lg bg-aksen text-atas font-medium py-3 disabled:opacity-50"
       >
         {pending ? "Memeriksa…" : "Masuk"}
       </button>

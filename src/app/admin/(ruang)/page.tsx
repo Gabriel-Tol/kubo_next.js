@@ -84,7 +84,7 @@ export default async function DashboardAdmin() {
                 </div>
                 <Link
                   href={`/admin/pesanan/${o.id}`}
-                  className="min-h-11 inline-flex items-center rounded-lg bg-aksen text-white font-medium px-4 py-2 text-sm"
+                  className="min-h-11 inline-flex items-center rounded-lg bg-aksen text-atas font-medium px-4 py-2 text-sm"
                 >
                   Verifikasi pembayaran
                 </Link>

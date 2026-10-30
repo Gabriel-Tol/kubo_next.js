@@ -55,7 +55,7 @@ export function FormBukti({ orderNo }: { orderNo: string }) {
       {nama && <p className="text-sm text-teks2">Berkas terpilih: {nama}</p>}
       <button
         disabled={pending || !!pesanKlien}
-        className="min-h-11 rounded-lg bg-aksen text-white font-medium px-6 py-3 disabled:opacity-50"
+        className="min-h-11 rounded-lg bg-aksen text-atas font-medium px-6 py-3 disabled:opacity-50"
       >
         {pending ? "Mengunggah…" : "Kirim bukti"}
       </button>

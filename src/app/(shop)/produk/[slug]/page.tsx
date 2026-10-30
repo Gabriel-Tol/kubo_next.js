@@ -45,8 +45,7 @@ export default async function DetailProduk({
           />
         ) : (
           <div
-            className="aspect-square w-full rounded-xl flex items-center justify-center text-7xl font-judul text-kanvas"
-            style={{ backgroundColor: "#34231D" }}
+            className="aspect-square w-full rounded-xl flex items-center justify-center text-7xl font-judul text-kanvas bg-kakao"
             aria-hidden="true"
           >
             {p.name.replace(/^Bolu\s+/i, "").charAt(0)}

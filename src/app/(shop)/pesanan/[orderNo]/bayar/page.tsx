@@ -43,7 +43,7 @@ export default async function Bayar({ params }: { params: Promise<{ orderNo: str
       {kedaluwarsa ? (
         <div className="bg-permukaan border border-error/40 rounded-xl p-6 space-y-3">
           <p className="font-medium text-error">Batas pembayaran berakhir. Pesanan dibatalkan otomatis.</p>
-          <Link href="/katalog" className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-white font-medium px-5 py-2">
+          <Link href="/katalog" className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-atas font-medium px-5 py-2">
             Buat pesanan baru
           </Link>
         </div>

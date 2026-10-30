@@ -116,7 +116,7 @@ export function ProductForm({
         Publikasikan (tampil di katalog)
       </label>
 
-      <button disabled={pending} className="min-h-11 rounded-lg bg-aksen text-white font-medium px-6 py-3 disabled:opacity-50">
+      <button disabled={pending} className="min-h-11 rounded-lg bg-aksen text-atas font-medium px-6 py-3 disabled:opacity-50">
         {pending ? "Menyimpan…" : produk ? "Simpan perubahan" : "Tambah produk"}
       </button>
     </form>

@@ -49,6 +49,7 @@ export default async function Katalog({ searchParams }: { searchParams: Promise<
 
   return (
     <div className="grid md:grid-cols-[220px_1fr] gap-6">
+      <h1 className="md:col-span-2 text-3xl md:text-4xl font-bold">Katalog bolu</h1>
       <aside className="md:sticky md:top-20 h-fit">
         <form className="bg-permukaan border border-kakao/10 rounded-xl p-4 space-y-4" method="get">
           <h2 className="font-bold text-lg">Filter</h2>
@@ -149,7 +150,7 @@ export default async function Katalog({ searchParams }: { searchParams: Promise<
             <p className="text-sm text-teks2">Coba kata kunci lain atau atur ulang filter.</p>
             <a
               href="/katalog"
-              className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-white font-medium px-5 py-2"
+              className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-atas font-medium px-5 py-2"
             >
               Reset pencarian &amp; filter
             </a>

@@ -17,8 +17,9 @@ export default async function Beranda() {
 
   return (
     <div className="space-y-10">
-      <section className="bg-permukaan border border-kakao/10 rounded-[20px] p-8 md:p-12 text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-bold">
+      {/* Judul halaman di atas kanvas krem, tanpa kotak — mengikuti pola judul Stitch */}
+      <section className="py-4 md:py-8 text-center space-y-4">
+        <h1 className="text-3xl md:text-5xl font-bold">
           Bolu hangat langsung dari oven rumahan
         </h1>
         <p className="text-teks2 max-w-xl mx-auto">
@@ -27,7 +28,7 @@ export default async function Beranda() {
         </p>
         <Link
           href="/katalog"
-          className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-white font-medium px-6 py-3 hover:bg-aksen/90"
+          className="inline-flex min-h-11 items-center rounded-lg bg-aksen text-atas font-medium px-6 py-3 hover:bg-aksen/90"
         >
           Belanja bolu
         </Link>
